@@ -2,108 +2,133 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Infinity Query</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <title>Futuristic Dashboard</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             background-color: #121212;
             color: white;
             text-align: center;
-            padding: 20px;
         }
         .container {
-            max-width: 500px;
-            margin: auto;
-            background: #1e1e1e;
+            max-width: 600px;
+            margin: 50px auto;
             padding: 20px;
+            background: #1e1e1e;
             border-radius: 10px;
-            box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+            box-shadow: 0px 0px 10px rgba(0, 255, 255, 0.5);
         }
-        input {
-            width: 80%;
+        input, select, button {
+            width: 100%;
             padding: 10px;
+            margin: 10px 0;
             border-radius: 5px;
             border: none;
         }
         button {
-            padding: 10px 15px;
-            margin: 10px;
+            background: cyan;
+            color: black;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .hidden {
+            display: none;
+        }
+        .search-bar {
+            width: 90%;
+            padding: 10px;
+            margin: 10px auto;
+            display: block;
+            border-radius: 20px;
             border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: 0.3s;
+            font-size: 16px;
+            text-align: center;
         }
-        .search-btn { background: orange; color: white; }
-        .incognito-btn { background: grey; color: white; }
-        .search-btn:hover { background: darkorange; }
-        .incognito-btn:hover { background: darkgray; }
-        .trending {
+        .icons {
             display: flex;
-            flex-wrap: wrap;
             justify-content: center;
-            margin-top: 15px;
+            gap: 15px;
+            margin: 20px 0;
         }
-        .trend-item {
-            background: #2a2a2a;
-            padding: 8px 12px;
-            margin: 5px;
-            border-radius: 5px;
+        .icons img {
+            width: 40px;
+            height: 40px;
             cursor: pointer;
-            transition: 0.3s;
-        }
-        .trend-item:hover {
-            background: #3a3a3a;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Infinity Query</h1>
-        <input type="text" id="search-box" placeholder="Search...">
-        <br>
-        <button class="search-btn" onclick="search(false)">Search</button>
-        <button class="incognito-btn" onclick="search(true)">Incognito</button><h2>Trending Topics</h2>
-    <div class="trending" id="trending-topics"></div>
+    <div class="container" id="login-container">
+        <h2>Login / Signup</h2>
+        <input type="email" id="email" placeholder="Enter your Email" required>
+        <input type="password" id="password" placeholder="Enter Password" required>
+        <button onclick="showCategorySelection()">Continue</button>
+    </div><div class="container hidden" id="category-container">
+    <h2>Select Your Category</h2>
+    <select id="category" onchange="loadDashboard()">
+        <option value="">Select</option>
+        <option value="painter">Painter</option>
+        <option value="teacher">Teacher</option>
+        <option value="student">Student</option>
+        <option value="professor">Professor</option>
+        <option value="entrepreneur">Entrepreneur</option>
+        <option value="businessman">Businessman</option>
+        <option value="shopkeeper">Shopkeeper</option>
+        <option value="youtuber">YouTuber</option>
+        <option value="instagrammer">Instagrammer</option>
+        <option value="general">General</option>
+        <option value="jobless">Jobless</option>
+        <option value="other">Other</option>
+    </select>
+</div>
+
+<div class="container hidden" id="dashboard">
+    <input type="text" class="search-bar" placeholder="Search...">
+    <div class="icons">
+        <img src="facebook.png" alt="Facebook">
+        <img src="twitter.png" alt="Twitter">
+        <img src="youtube.png" alt="YouTube">
+        <img src="instagram.png" alt="Instagram">
+        <img src="google.png" alt="Google">
+        <img src="chrome.png" alt="Chrome">
+    </div>
+    <h3 id="content-title">Welcome</h3>
+    <p id="content"></p>
 </div>
 
 <script>
-    let trending = ["Anime", "Phones", "AI", "News", "International News"];
-
-    function updateTrending() {
-        let trendingDiv = document.getElementById("trending-topics");
-        trendingDiv.innerHTML = "";
-        trending.forEach(topic => {
-            let btn = document.createElement("div");
-            btn.className = "trend-item";
-            btn.innerText = topic;
-            btn.onclick = () => {
-                document.getElementById("search-box").value = topic;
-                search(false);
-            };
-            trendingDiv.appendChild(btn);
-        });
+    function showCategorySelection() {
+        document.getElementById('login-container').classList.add('hidden');
+        document.getElementById('category-container').classList.remove('hidden');
     }
+    
+    function loadDashboard() {
+        const category = document.getElementById('category').value;
+        if (category) {
+            document.getElementById('category-container').classList.add('hidden');
+            document.getElementById('dashboard').classList.remove('hidden');
 
-    function search(incognito) {
-        let query = document.getElementById("search-box").value;
-        if (query.trim() !== "") {
-            if (!trending.includes(query)) {
-                trending.push(query);
-                if (trending.length > 10) trending.shift(); // Keep recent 10 trends
-            }
-            updateTrending();
-            let url = `https://www.google.com/search?q=${encodeURIComponent(query)}`;
-            if (incognito) {
-                window.open(url, "_blank");
-            } else {
-                window.location.href = url;
-            }
+            const contentTitle = document.getElementById('content-title');
+            const content = document.getElementById('content');
+            const topics = {
+                painter: "Explore the world of painting and creativity!",
+                teacher: "Find the best educational resources and teaching tools!",
+                student: "Enhance your learning with study materials and guides!",
+                professor: "Advanced studies and research materials available!",
+                entrepreneur: "Business growth strategies and motivational insights!",
+                businessman: "Learn about profits, investments, and market trends!",
+                shopkeeper: "Tips and tricks for managing a successful shop!",
+                youtuber: "Content creation, growth hacks, and new video ideas!",
+                instagrammer: "Boost your engagement with the best social strategies!",
+                general: "General knowledge and trending topics from the web!",
+                jobless: "Find the latest job openings and career opportunities!",
+                other: "Explore diverse and interesting content!"
+            };
+            contentTitle.textContent = category.charAt(0).toUpperCase() + category.slice(1);
+            content.textContent = topics[category];
         }
     }
-
-    updateTrending();
 </script>
 
 </body>
-</html>
+    </html>
