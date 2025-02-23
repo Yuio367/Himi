@@ -1,157 +1,96 @@
-    <!DOCTYPE html><html lang="en">
+<!DOCTYPE html><html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Infinity Query</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap');body {
-        font-family: 'Orbitron', sans-serif;
-        text-align: center;
-        margin: 0;
-        padding: 0;
-        background: radial-gradient(circle, #0f0c29, #302b63, #24243e);
-        color: white;
-        height: 100vh;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-    .container {
-        width: 90%;
-        max-width: 450px;
-        padding: 20px;
-        background: rgba(255, 255, 255, 0.1);
-        border-radius: 15px;
-        box-shadow: 0px 0px 15px rgba(0, 255, 255, 0.5);
-        backdrop-filter: blur(10px);
-    }
-    input, button {
-        width: 90%;
-        padding: 12px;
-        margin: 10px 0;
-        font-size: 16px;
-        border: none;
-        border-radius: 5px;
-    }
-    input {
-        background: rgba(255, 255, 255, 0.2);
-        color: white;
-    }
-    button {
-        background: #00e1ff;
-        color: white;
-        font-weight: bold;
-        cursor: pointer;
-        transition: 0.3s;
-    }
-    button:hover {
-        background: #00aaff;
-    }
-    .icon-container {
-        display: grid;
-        grid-template-columns: repeat(4, 1fr);
-        gap: 15px;
-        justify-items: center;
-        margin-top: 20px;
-    }
-    .icon {
-        width: 60px;
-        height: 60px;
-        cursor: pointer;
-        transition: 0.3s;
-    }
-    .icon:hover {
-        transform: scale(1.2);
-    }
-    .hidden {
-        display: none;
-    }
-</style>
-
+        body {
+            background: linear-gradient(135deg, #0f0f0f, #1a1a2e);
+            color: white;
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.2);
+        }
+        input {
+            width: 80%;
+            padding: 10px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 5px;
+        }
+        button {
+            padding: 10px 20px;
+            border: none;
+            background: #ff6700;
+            color: white;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .search-options {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        .search-options img {
+            width: 40px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .search-options img:hover {
+            transform: scale(1.1);
+        }
+    </style>
 </head>
 <body>
-    <div class="container" id="loginContainer">
-        <h2>Sign In</h2>
-        <input type="text" id="username" placeholder="Enter Username">
-        <input type="password" id="password" placeholder="Enter Password">
-        <button onclick="login()">Login</button>
-    </div><div class="container hidden" id="searchContainer">
-    <h1>Infinity Query</h1>
-    <input type="text" id="searchQuery" placeholder="Search...">
-    <button onclick="searchInternet()">Search</button>
-    <button onclick="logout()">Logout</button>
-    <div class="icon-container">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/2/2f/Google_2015_logo.svg" class="icon" onclick="searchSite('google')">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/9d/Bing_favicon.svg/1024px-Bing_favicon.svg.png" class="icon" onclick="searchSite('bing')">
-        <img src="https://duckduckgo.com/assets/logo_header.v108.svg" class="icon" onclick="searchSite('duckduckgo')">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/d/d0/Google_Play_Arrow_logo.svg" class="icon" onclick="searchSite('playstore')">
-        <img src="https://www.youtube.com/s/desktop/37fa6cf7/img/favicon_144x144.png" class="icon" onclick="searchSite('youtube')">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/8/89/Facebook_Logo_%282019%29.svg" class="icon" onclick="searchSite('facebook')">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/6/6f/Twitter_Logo_2021.svg" class="icon" onclick="searchSite('twitter')">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png" class="icon" onclick="searchSite('instagram')">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/c/cb/Google_Chrome_icon_%282023%29.svg" class="icon" onclick="searchSite('chrome')">
-        <img src="https://deepseek.com/favicon.ico" class="icon" onclick="searchSite('deepseek')">
-        <img src="https://chat.openai.com/favicon.ico" class="icon" onclick="searchSite('chatgpt')">
+    <div class="container">
+        <h1>Infinity Query</h1>
+        <input type="text" id="searchBox" placeholder="Search...">
+        <button onclick="search()">Search</button>
+        <button onclick="incognitoSearch()" style="background: #444;">Incognito</button>
+        <div class="search-options">
+            <img src="google.png" onclick="redirect('https://www.google.com/search?q=')" alt="Google">
+            <img src="bing.png" onclick="redirect('https://www.bing.com/search?q=')" alt="Bing">
+            <img src="duckduckgo.png" onclick="redirect('https://www.duckduckgo.com/?q=')" alt="DuckDuckGo">
+            <img src="playstore.png" onclick="redirect('https://play.google.com/store/search?q=')" alt="Play Store">
+            <img src="facebook.png" onclick="redirect('https://www.facebook.com/search/top?q=')" alt="Facebook">
+            <img src="twitter.png" onclick="redirect('https://twitter.com/search?q=')" alt="Twitter">
+            <img src="chatgpt.png" onclick="redirect('https://chat.openai.com/?q=')" alt="ChatGPT">
+        </div>
+        <div id="trending">
+            <h2>Trending Topics</h2>
+            <ul id="trendingList"></ul>
+        </div>
     </div>
-</div>
-
-<script>
-    function login() {
-        let username = document.getElementById('username').value;
-        let password = document.getElementById('password').value;
-        if (username && password) {
-            localStorage.setItem('username', username);
-            localStorage.setItem('password', password);
-            showSearchEngine();
-        } else {
-            alert('Please enter valid credentials.');
+    <script>
+        function search() {
+            let query = document.getElementById('searchBox').value;
+            window.location.href = 'https://www.google.com/search?q=' + encodeURIComponent(query);
+            updateTrending(query);
         }
-    }
-    
-    function showSearchEngine() {
-        document.getElementById('loginContainer').classList.add('hidden');
-        document.getElementById('searchContainer').classList.remove('hidden');
-    }
-    
-    function searchInternet() {
-        let query = document.getElementById('searchQuery').value;
-        if (query) {
-            window.location.href = `https://www.google.com/search?q=${encodeURIComponent(query)}`;
+        function incognitoSearch() {
+            let query = document.getElementById('searchBox').value;
+            window.open('https://www.google.com/search?q=' + encodeURIComponent(query), '_blank');
         }
-    }
-    
-    function searchSite(site) {
-        let query = document.getElementById('searchQuery').value;
-        let urls = {
-            google: `https://www.google.com/search?q=${encodeURIComponent(query)}`,
-            bing: `https://www.bing.com/search?q=${encodeURIComponent(query)}`,
-            duckduckgo: `https://duckduckgo.com/?q=${encodeURIComponent(query)}`,
-            playstore: `https://play.google.com/store/search?q=${encodeURIComponent(query)}&c=apps`,
-            youtube: `https://www.youtube.com/results?search_query=${encodeURIComponent(query)}`,
-            facebook: `https://www.facebook.com/search/top?q=${encodeURIComponent(query)}`,
-            twitter: `https://twitter.com/search?q=${encodeURIComponent(query)}`,
-            instagram: `https://www.instagram.com/explore/tags/${encodeURIComponent(query)}/`,
-            chrome: `https://www.google.com/search?q=${encodeURIComponent(query)}`,
-            deepseek: `https://deepseek.com/search?q=${encodeURIComponent(query)}`,
-            chatgpt: `https://chat.openai.com/?q=${encodeURIComponent(query)}`
-        };
-        if (urls[site]) {
-            window.location.href = urls[site];
+        function redirect(url) {
+            let query = document.getElementById('searchBox').value;
+            window.location.href = url + encodeURIComponent(query);
         }
-    }
-    
-    function logout() {
-        localStorage.removeItem('username');
-        localStorage.removeItem('password');
-        location.reload();
-    }
-    
-    window.onload = function() {
-        if (localStorage.getItem('username') && localStorage.getItem('password')) {
-            showSearchEngine();
+        function updateTrending(query) {
+            let trendingList = document.getElementById('trendingList');
+            let listItem = document.createElement('li');
+            listItem.textContent = query;
+            trendingList.appendChild(listItem);
         }
-    }
-</script>
-
+    </script>
 </body>
-    </html>
+</html>
