@@ -3,101 +3,107 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Infinity Query</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         body {
+            font-family: Arial, sans-serif;
             background-color: #121212;
             color: white;
-            font-family: Arial, sans-serif;
             text-align: center;
             padding: 20px;
         }
         .container {
-            background: rgba(255, 255, 255, 0.1);
+            max-width: 500px;
+            margin: auto;
+            background: #1e1e1e;
             padding: 20px;
             border-radius: 10px;
             box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
-            max-width: 400px;
-            margin: auto;
         }
         input {
             width: 80%;
             padding: 10px;
-            margin: 10px 0;
-            border: none;
             border-radius: 5px;
-            text-align: center;
+            border: none;
         }
         button {
-            background-color: orange;
-            color: white;
+            padding: 10px 15px;
+            margin: 10px;
             border: none;
-            padding: 10px 20px;
             border-radius: 5px;
             cursor: pointer;
+            transition: 0.3s;
         }
-        .icons {
+        .search-btn { background: orange; color: white; }
+        .incognito-btn { background: grey; color: white; }
+        .search-btn:hover { background: darkorange; }
+        .incognito-btn:hover { background: darkgray; }
+        .trending {
             display: flex;
-            justify-content: center;
             flex-wrap: wrap;
-            gap: 15px;
+            justify-content: center;
             margin-top: 15px;
         }
-        .icons img {
-            width: 40px;
-            height: 40px;
+        .trend-item {
+            background: #2a2a2a;
+            padding: 8px 12px;
+            margin: 5px;
             border-radius: 5px;
-            transition: transform 0.3s;
+            cursor: pointer;
+            transition: 0.3s;
         }
-        .icons img:hover {
-            transform: scale(1.1);
-        }
-        .trending {
-            margin-top: 20px;
-            font-size: 1.2em;
+        .trend-item:hover {
+            background: #3a3a3a;
         }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>Infinity Query</h1>
-        <input type="text" placeholder="Search..." id="searchBox">
+        <input type="text" id="search-box" placeholder="Search...">
         <br>
-        <button onclick="search()">Search</button>
-        <button onclick="incognito()" style="background-color: gray;">Incognito</button>
-        <div class="icons">
-            <a href="https://www.google.com" target="_blank"><img src="https://upload.wikimedia.org/wikipedia/commons/2/2f/Google_2015_logo.svg"></a>
-            <a href="https://www.bing.com" target="_blank"><img src="https://upload.wikimedia.org/wikipedia/commons/9/96/Bing_Fluent_Logo.svg"></a>
-            <a href="https://duckduckgo.com" target="_blank"><img src="https://upload.wikimedia.org/wikipedia/en/8/88/DuckDuckGo_logo.svg"></a>
-            <a href="https://play.google.com" target="_blank"><img src="https://upload.wikimedia.org/wikipedia/commons/d/d1/Google_Play_Arrow_logo.svg"></a>
-            <a href="https://www.facebook.com" target="_blank"><img src="https://upload.wikimedia.org/wikipedia/commons/1/1b/Facebook_icon.svg"></a>
-            <a href="https://www.twitter.com" target="_blank"><img src="https://upload.wikimedia.org/wikipedia/en/6/60/Twitter_Logo_as_of_2021.svg"></a>
-            <a href="https://www.chatgpt.com" target="_blank"><img src="https://upload.wikimedia.org/wikipedia/commons/0/04/ChatGPT_logo.svg"></a>
-        </div>
-        <div class="trending">Trending Topics: <span id="trendingTopics">Anime, Phones, AI, News, International News</span></div>
-    </div>
-    <script>
-        function search() {
-            let query = document.getElementById('searchBox').value;
-            if (query) {
-                window.open(`https://www.google.com/search?q=${query}`, '_blank');
-                updateTrending(query);
+        <button class="search-btn" onclick="search(false)">Search</button>
+        <button class="incognito-btn" onclick="search(true)">Incognito</button><h2>Trending Topics</h2>
+    <div class="trending" id="trending-topics"></div>
+</div>
+
+<script>
+    let trending = ["Anime", "Phones", "AI", "News", "International News"];
+
+    function updateTrending() {
+        let trendingDiv = document.getElementById("trending-topics");
+        trendingDiv.innerHTML = "";
+        trending.forEach(topic => {
+            let btn = document.createElement("div");
+            btn.className = "trend-item";
+            btn.innerText = topic;
+            btn.onclick = () => {
+                document.getElementById("search-box").value = topic;
+                search(false);
+            };
+            trendingDiv.appendChild(btn);
+        });
+    }
+
+    function search(incognito) {
+        let query = document.getElementById("search-box").value;
+        if (query.trim() !== "") {
+            if (!trending.includes(query)) {
+                trending.push(query);
+                if (trending.length > 10) trending.shift(); // Keep recent 10 trends
+            }
+            updateTrending();
+            let url = `https://www.google.com/search?q=${encodeURIComponent(query)}`;
+            if (incognito) {
+                window.open(url, "_blank");
+            } else {
+                window.location.href = url;
             }
         }
-        function incognito() {
-            let query = document.getElementById('searchBox').value;
-            if (query) {
-                window.open(`https://www.google.com/search?q=${query}`, '_blank', 'noreferrer');
-            }
-        }
-        function updateTrending(query) {
-            let trending = document.getElementById('trendingTopics');
-            let topics = trending.innerText.split(', ');
-            if (!topics.includes(query)) {
-                topics.push(query);
-                if (topics.length > 10) topics.shift();
-                trending.innerText = topics.join(', ');
-            }
-        }
-    </script>
+    }
+
+    updateTrending();
+</script>
+
 </body>
 </html>
