@@ -5,19 +5,19 @@
     <title>Infinity Query</title>
     <style>
         body {
-            background: linear-gradient(135deg, #0f0f0f, #1a1a2e);
+            background-color: #121212;
             color: white;
             font-family: Arial, sans-serif;
             text-align: center;
             padding: 20px;
         }
         .container {
-            max-width: 600px;
-            margin: auto;
             background: rgba(255, 255, 255, 0.1);
             padding: 20px;
             border-radius: 10px;
-            box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.2);
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+            max-width: 400px;
+            margin: auto;
         }
         input {
             width: 80%;
@@ -25,71 +25,78 @@
             margin: 10px 0;
             border: none;
             border-radius: 5px;
+            text-align: center;
         }
         button {
-            padding: 10px 20px;
-            border: none;
-            background: #ff6700;
+            background-color: orange;
             color: white;
-            font-size: 16px;
+            border: none;
+            padding: 10px 20px;
             border-radius: 5px;
             cursor: pointer;
         }
-        .search-options {
+        .icons {
             display: flex;
             justify-content: center;
-            gap: 10px;
-            margin-top: 10px;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 15px;
         }
-        .search-options img {
+        .icons img {
             width: 40px;
-            cursor: pointer;
-            transition: 0.3s;
+            height: 40px;
+            border-radius: 5px;
+            transition: transform 0.3s;
         }
-        .search-options img:hover {
+        .icons img:hover {
             transform: scale(1.1);
+        }
+        .trending {
+            margin-top: 20px;
+            font-size: 1.2em;
         }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>Infinity Query</h1>
-        <input type="text" id="searchBox" placeholder="Search...">
+        <input type="text" placeholder="Search..." id="searchBox">
+        <br>
         <button onclick="search()">Search</button>
-        <button onclick="incognitoSearch()" style="background: #444;">Incognito</button>
-        <div class="search-options">
-            <img src="google.png" onclick="redirect('https://www.google.com/search?q=')" alt="Google">
-            <img src="bing.png" onclick="redirect('https://www.bing.com/search?q=')" alt="Bing">
-            <img src="duckduckgo.png" onclick="redirect('https://www.duckduckgo.com/?q=')" alt="DuckDuckGo">
-            <img src="playstore.png" onclick="redirect('https://play.google.com/store/search?q=')" alt="Play Store">
-            <img src="facebook.png" onclick="redirect('https://www.facebook.com/search/top?q=')" alt="Facebook">
-            <img src="twitter.png" onclick="redirect('https://twitter.com/search?q=')" alt="Twitter">
-            <img src="chatgpt.png" onclick="redirect('https://chat.openai.com/?q=')" alt="ChatGPT">
+        <button onclick="incognito()" style="background-color: gray;">Incognito</button>
+        <div class="icons">
+            <a href="https://www.google.com" target="_blank"><img src="https://upload.wikimedia.org/wikipedia/commons/2/2f/Google_2015_logo.svg"></a>
+            <a href="https://www.bing.com" target="_blank"><img src="https://upload.wikimedia.org/wikipedia/commons/9/96/Bing_Fluent_Logo.svg"></a>
+            <a href="https://duckduckgo.com" target="_blank"><img src="https://upload.wikimedia.org/wikipedia/en/8/88/DuckDuckGo_logo.svg"></a>
+            <a href="https://play.google.com" target="_blank"><img src="https://upload.wikimedia.org/wikipedia/commons/d/d1/Google_Play_Arrow_logo.svg"></a>
+            <a href="https://www.facebook.com" target="_blank"><img src="https://upload.wikimedia.org/wikipedia/commons/1/1b/Facebook_icon.svg"></a>
+            <a href="https://www.twitter.com" target="_blank"><img src="https://upload.wikimedia.org/wikipedia/en/6/60/Twitter_Logo_as_of_2021.svg"></a>
+            <a href="https://www.chatgpt.com" target="_blank"><img src="https://upload.wikimedia.org/wikipedia/commons/0/04/ChatGPT_logo.svg"></a>
         </div>
-        <div id="trending">
-            <h2>Trending Topics</h2>
-            <ul id="trendingList"></ul>
-        </div>
+        <div class="trending">Trending Topics: <span id="trendingTopics">Anime, Phones, AI, News, International News</span></div>
     </div>
     <script>
         function search() {
             let query = document.getElementById('searchBox').value;
-            window.location.href = 'https://www.google.com/search?q=' + encodeURIComponent(query);
-            updateTrending(query);
+            if (query) {
+                window.open(`https://www.google.com/search?q=${query}`, '_blank');
+                updateTrending(query);
+            }
         }
-        function incognitoSearch() {
+        function incognito() {
             let query = document.getElementById('searchBox').value;
-            window.open('https://www.google.com/search?q=' + encodeURIComponent(query), '_blank');
-        }
-        function redirect(url) {
-            let query = document.getElementById('searchBox').value;
-            window.location.href = url + encodeURIComponent(query);
+            if (query) {
+                window.open(`https://www.google.com/search?q=${query}`, '_blank', 'noreferrer');
+            }
         }
         function updateTrending(query) {
-            let trendingList = document.getElementById('trendingList');
-            let listItem = document.createElement('li');
-            listItem.textContent = query;
-            trendingList.appendChild(listItem);
+            let trending = document.getElementById('trendingTopics');
+            let topics = trending.innerText.split(', ');
+            if (!topics.includes(query)) {
+                topics.push(query);
+                if (topics.length > 10) topics.shift();
+                trending.innerText = topics.join(', ');
+            }
         }
     </script>
 </body>
